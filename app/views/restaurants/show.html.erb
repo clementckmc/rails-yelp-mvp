@@ -1,16 +1,35 @@
 <div class="container">
-  <h1><%= @restaurant.name %></h1>
-  <p>Address: <%= @restaurant.address %></p>
-  <p>Phone-number: <%= @restaurant.phone_number %></p>
-  <p>Category: <%= @restaurant.category %></p>
-  <h2>Reviews</h2>
-  <ul>
-    <li>
-      <% @restaurant.reviews.each do |r| %>
-        <%= r.content %> -
-        rating: <%= r.rating %> / 5
-      <% end %>
-    </li>
-  </ul>
-  <%= link_to "Back", restaurants_path  %>
+  <img src="http://source.unsplash.com/featured/?<%= @restaurant.category.downcase %>&<%= rand(1000) %>" alt="image" style="width:50%; height:50%; max-height: 400px">
+  <div>
+    <h2><%= @restaurant.name %></h2>
+    <p>Address: <%= @restaurant.address %></p>
+    <p>Phone-number: <%= @restaurant.phone_number %></p>
+    <p>Category: <%= @restaurant.category %></p>
+  </div>
+  <hr>
+  <h2>Reviews
+    <%= link_to new_restaurant_review_path(@restaurant) do %>
+      <i class="fa-regular fa-plus"></i>
+    <% end %>
+  </h2>
+  <% if @restaurant.reviews.any? %>
+    <% @restaurant.reviews.each do |review| %>
+      <div class="card w-75">
+        <div class="card-body">
+          <h5 class="card-title">
+            <% review.rating.times do %>
+              <i class="fa-solid fa-star"></i>
+            <% end %>
+            <% (5 - review.rating).times do %>
+              <i class="fa-regular fa-star"></i>
+            <% end %>
+          </h5>
+          <p class="card-text"><%= review.content %></p>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No reviews yet</p>
+  <% end %>
+  <%= link_to "Back", restaurants_path, class: "btn btn-secondary"  %>
 </div>
